@@ -123,14 +123,17 @@ body {
     align-items: center;
     cursor: pointer;
     width: 120px;
-    transition: background-color 0.3s;
+    color: black;
+    transition: background-color 1s;
 }
 
 .algorithm-option:hover {
     background-color: #c5c5c5;
 }
 
-
+.algorithm-option.active {
+  background-color: lightgreen;
+}
 
 .visualize-button {
     flex: 25;

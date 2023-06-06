@@ -23,6 +23,7 @@ export default class SortingVisualizer extends React.Component {
             barWidth: 20,
             delay: 30,
             showAlgorithmOptions: false,
+            algorithmOption: '',
         };
 
         this.handleSliderChange = this.handleSliderChange.bind(this);
@@ -62,7 +63,7 @@ export default class SortingVisualizer extends React.Component {
     };
 
     handleAlgorithmsMouseLeave = () => {
-    this.setState({ showAlgorithmOptions: false });
+        this.setState({ showAlgorithmOptions: false });
     };
 
     setDelay() {
@@ -82,7 +83,8 @@ export default class SortingVisualizer extends React.Component {
     }
 
     mergeSort() {
-        let animations = mergeSort(this.state.array);
+
+        let animations = mergeSort(this.state.array.slice());
         const arrayBars = document.getElementsByClassName('array-bar');
 
         console.log(this.state.array);
@@ -108,7 +110,8 @@ export default class SortingVisualizer extends React.Component {
       }
 
     quickSort() {
-        let animations = quickSort(this.state.array);
+        
+        let animations = quickSort(this.state.array.slice());
 
         for (let i = 0; i < animations.length; i++) {
             const arraybars = document.getElementsByClassName('array-bar');
@@ -140,7 +143,10 @@ export default class SortingVisualizer extends React.Component {
     }
 
     bubbleSort() {
-        let animations = bubbleSort(this.state.array);
+
+        this.setState({ algorithmOption: 'bubbleSort'});
+        
+        let animations = bubbleSort(this.state.array.slice());
 
         for (let i = 0; i < animations.length; i++) {
             const arraybars = document.getElementsByClassName('array-bar');
@@ -167,6 +173,18 @@ export default class SortingVisualizer extends React.Component {
                     barOneStyle.backgroundColor = FINAL_COLOR;
                 }, i * this.state.delay * 0.5);
             }
+        }
+    }
+
+    visualize() {
+        console.log('Starting to visualize...');
+        
+        if (this.state.algorithmOption === "mergeSort") {
+            this.mergeSort();
+        } else if (this.state.algorithmOption === "quickSort") {
+            this.quickSort();
+        } else {
+            this.bubbleSort();
         }
     }
 
@@ -204,26 +222,26 @@ export default class SortingVisualizer extends React.Component {
                         onMouseLeave={this.handleAlgorithmsMouseLeave}
                         >
                         {!this.state.showAlgorithmOptions ? "ALGORITHMS" : 
-                            <>
+                            <div className='algo-options'>
                                 <div
-                                    className="algorithm-option"
-                                    onClick={() => this.mergeSort()}
+                                    className={`algorithm-option ${this.state.algorithmOption === 'mergeSort' ? 'active' : ''}`}
+                                    onClick={() => this.setState({ algorithmOption: 'mergeSort' })}
                                 >
                                     Merge Sort
                                 </div>
                                 <div
-                                    className="algorithm-option"
-                                    onClick={this.quickSort}
+                                    className={`algorithm-option ${this.state.algorithmOption === 'quickSort' ? 'active' : ''}`}
+                                    onClick={() => this.setState({ algorithmOption: 'quickSort' })}
                                 >
                                     Quick Sort
                                 </div>
                                 <div
-                                    className="algorithm-option"
-                                    onClick={this.bubbleSort}
+                                    className={`algorithm-option ${this.state.algorithmOption === 'bubbleSort' ? 'active' : ''}`}
+                                    onClick={() => this.setState({ algorithmOption: 'bubbleSort' })}
                                 >
                                     Bubble Sort
                                 </div>
-                            </>
+                            </div>
                         }
                         </div>
                         <div className='colors'>
@@ -231,7 +249,7 @@ export default class SortingVisualizer extends React.Component {
                         </div>
                     </div>
                     <div className='visualize-button'>
-                    <button className='glowing-btn'>
+                    <button className='glowing-btn' onClick={() => this.visualize()}>
                         <span className='glowing-txt'>V<span className='faulty-letter'>I</span>SU<span className='faulty-letter'>A</span>LIZ<span className='faulty-letter'>E</span></span>
                     </button>
                     </div>
