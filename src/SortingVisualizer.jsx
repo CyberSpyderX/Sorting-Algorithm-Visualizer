@@ -22,6 +22,7 @@ export default class SortingVisualizer extends React.Component {
             numberOfBars: 10,
             barWidth: 20,
             delay: 30,
+            showAlgorithmOptions: false,
         };
 
         this.handleSliderChange = this.handleSliderChange.bind(this);
@@ -44,6 +45,7 @@ export default class SortingVisualizer extends React.Component {
             arrayBars[i].style.backgroundColor = ORIGINAL_COLOR;
         }
     }
+    
 
     componentDidMount() {
         this.resetArray();
@@ -54,6 +56,14 @@ export default class SortingVisualizer extends React.Component {
         console.log(this.state.numberOfBars, MAX_WIDTH, MAX_WIDTH);
         this.setState({ barWidth });
     }
+
+    handleAlgorithmsMouseEnter = () => {
+        this.setState({ showAlgorithmOptions: true });
+    };
+
+    handleAlgorithmsMouseLeave = () => {
+    this.setState({ showAlgorithmOptions: false });
+    };
 
     setDelay() {
         const { numberOfBars } = this.state;
@@ -126,8 +136,7 @@ export default class SortingVisualizer extends React.Component {
                     barOneStyle.backgroundColor = FINAL_COLOR;
                 }, i * this.state.delay);
         }
-    }
-
+      }
     }
 
     bubbleSort() {
@@ -189,8 +198,33 @@ export default class SortingVisualizer extends React.Component {
                         </div>
                     </div>
                     <div className='algo-options'>
-                        <div className='algorithms'>
-                            ALGORITHMS
+                    <div
+                        className="algorithms"
+                        onMouseEnter={this.handleAlgorithmsMouseEnter}
+                        onMouseLeave={this.handleAlgorithmsMouseLeave}
+                        >
+                        {!this.state.showAlgorithmOptions ? "ALGORITHMS" : 
+                            <>
+                                <div
+                                    className="algorithm-option"
+                                    onClick={() => this.mergeSort()}
+                                >
+                                    Merge Sort
+                                </div>
+                                <div
+                                    className="algorithm-option"
+                                    onClick={this.quickSort}
+                                >
+                                    Quick Sort
+                                </div>
+                                <div
+                                    className="algorithm-option"
+                                    onClick={this.bubbleSort}
+                                >
+                                    Bubble Sort
+                                </div>
+                            </>
+                        }
                         </div>
                         <div className='colors'>
                             COLORS
