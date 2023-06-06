@@ -12,6 +12,11 @@ const COMPARISON_COLOR = 'red';
 const ORIGINAL_COLOR = 'white';
 const FINAL_COLOR = 'lightgreen';
 
+const SLIDER_ENABLED_COLOR_LEFT = '#00ffcc'
+const SLIDER_ENABLED_COLOR_RIGHT = '#ff00ff'
+const SLIDER_DISABLED_COLOR_LEFT = '#808080'
+const SLIDER_DISABLED_COLOR_RIGHT = '#808080'
+
 export default class SortingVisualizer extends React.Component {
 
     constructor(props) {
@@ -24,6 +29,8 @@ export default class SortingVisualizer extends React.Component {
             delay: 30,
             showAlgorithmOptions: false,
             algorithmOption: '',
+            sliderBackground: 'linear-gradient(to right, #00ffcc, #ff00ff)',
+            isSorting: false,
         };
 
         this.handleSliderChange = this.handleSliderChange.bind(this);
@@ -107,6 +114,10 @@ export default class SortingVisualizer extends React.Component {
             }, i * this.state.delay);
           }
         }
+        setTimeout(() => {
+            this.setState({ isSorting: false });
+           this.changeSliderBackground('#808080','#00ffcc', ' rgb(255, 0, 255)'); 
+        }, animations.length * this.state.delay);
       }
 
     quickSort() {
@@ -140,6 +151,12 @@ export default class SortingVisualizer extends React.Component {
                 }, i * this.state.delay);
         }
       }
+      
+      
+        setTimeout(() => {
+            this.setState({ isSorting: false });
+        this.changeSliderBackground('#808080','#00ffcc', ' rgb(255, 0, 255)'); 
+        }, animations.length * this.state.delay);
     }
 
     bubbleSort() {
@@ -160,37 +177,98 @@ export default class SortingVisualizer extends React.Component {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
-                }, i * this.state.delay * 0.5);
+                }, i * this.state.delay * 0.25);
 
             } else if(type === 'S') {
                 setTimeout(() => {
                     const barOneStyle = arraybars[barOneIdx].style;
                     barOneStyle.height = `${barTwoIdx}px`;
-                }, i * this.state.delay * 0.5);
+                }, i * this.state.delay * 0.25);
             } else {
                 setTimeout(() => {
                     const barOneStyle = arraybars[barOneIdx].style;
                     barOneStyle.backgroundColor = FINAL_COLOR;
-                }, i * this.state.delay * 0.5);
+                }, i * this.state.delay * 0.25);
             }
         }
+        
+        setTimeout(() => {
+            this.setState({ isSorting: false });
+           this.changeSliderBackground('#808080','#00ffcc', ' rgb(255, 0, 255)'); 
+        }, animations.length * this.state.delay);
+    }
+
+    changeSliderBackground(initialColor, finalColor, rightColor) {
+        const duration = 1000; // Duration in milliseconds
+        const steps = 60; // Number of steps for the gradual change
+        
+        let stepCount = 0;
+        const colorInterval = setInterval(() => {
+          const progress = stepCount / steps;
+          const newColor = `linear-gradient(to right, ${this.lerpColor(initialColor, finalColor, progress)},${rightColor})`;
+          this.setState({ sliderBackground: newColor });
+          stepCount++;
+      
+          if (stepCount >= steps) {
+            clearInterval(colorInterval);
+          }
+        }, duration / steps);
+    }
+    
+      lerpColor(color1, color2, progress) {
+
+        const hexToRgb = (hex) => {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return [r, g, b];
+          };
+        
+          const rgbToHex = (rgb) => {
+            const componentToHex = (c) => {
+              const hex = c.toString(16);
+              return hex.length === 1 ? '0' + hex : hex;
+            };
+            return '#' + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
+          };
+
+        const color1Rgb = hexToRgb(color1);
+        const color2Rgb = hexToRgb(color2);
+        // const color1Rgb = color1.match(/\d+/g).map(Number);
+        // const color2Rgb = color2.match(/\d+/g).map(Number);
+        console.log(color1Rgb, color2Rgb);
+      
+        const r = Math.round(this.lerp(color1Rgb[0], color2Rgb[0], progress));
+        const g = Math.round(this.lerp(color1Rgb[1], color2Rgb[1], progress));
+        const b = Math.round(this.lerp(color1Rgb[2], color2Rgb[2], progress));
+      
+        return `rgb(${r}, ${g}, ${b})`;
+      }
+      
+      // Helper function to linearly interpolate between two values
+    lerp(value1, value2, progress) {
+        return value1 + (value2 - value1) * progress;
     }
 
     visualize() {
         console.log('Starting to visualize...');
-        
+
+        this.setState({ isSorting: true});
+
+        this.changeSliderBackground('#00ffcc', '#808080', ' rgb(80, 80, 80)');
+
         if (this.state.algorithmOption === "mergeSort") {
             this.mergeSort();
         } else if (this.state.algorithmOption === "quickSort") {
             this.quickSort();
-        } else {
+        } else if(this.state.algorithmOption === "bubbleSort") {
             this.bubbleSort();
         }
     }
 
     render() {
         const {array} = this.state;
-
+        console.log('Rendering...');
         return (
             <div className='container'>
                 <div className='title'>
@@ -209,8 +287,10 @@ export default class SortingVisualizer extends React.Component {
                                         min={`${MIN_BARS}`}
                                         max={`${MAX_BARS}`}
                                         step="2"
-                                        value={this.state.numberOfBars}
+                                        value={ this.state.numberOfBars }
                                         onChange={this.handleSliderChange}
+                                        style={{ background: this.state.sliderBackground }}
+                                        disabled={ this.state.isSorting }
                                 />
                             </div>
                         </div>
@@ -225,19 +305,19 @@ export default class SortingVisualizer extends React.Component {
                             <div className='algo-options'>
                                 <div
                                     className={`algorithm-option ${this.state.algorithmOption === 'mergeSort' ? 'active' : ''}`}
-                                    onClick={() => this.setState({ algorithmOption: 'mergeSort' })}
+                                    onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'mergeSort' }) } }
                                 >
                                     Merge Sort
                                 </div>
                                 <div
                                     className={`algorithm-option ${this.state.algorithmOption === 'quickSort' ? 'active' : ''}`}
-                                    onClick={() => this.setState({ algorithmOption: 'quickSort' })}
+                                    onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'quickSort' }) } }
                                 >
                                     Quick Sort
                                 </div>
                                 <div
                                     className={`algorithm-option ${this.state.algorithmOption === 'bubbleSort' ? 'active' : ''}`}
-                                    onClick={() => this.setState({ algorithmOption: 'bubbleSort' })}
+                                    onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'bubbleSort' }) } }
                                 >
                                     Bubble Sort
                                 </div>
@@ -249,7 +329,7 @@ export default class SortingVisualizer extends React.Component {
                         </div>
                     </div>
                     <div className='visualize-button'>
-                    <button className='glowing-btn' onClick={() => this.visualize()}>
+                    <button className='glowing-btn' onClick={() => this.visualize()} disabled={this.state.isSorting}>
                         <span className='glowing-txt'>V<span className='faulty-letter'>I</span>SU<span className='faulty-letter'>A</span>LIZ<span className='faulty-letter'>E</span></span>
                     </button>
                     </div>
