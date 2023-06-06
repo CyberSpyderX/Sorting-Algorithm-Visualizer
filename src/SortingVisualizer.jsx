@@ -25,9 +25,6 @@ export default class SortingVisualizer extends React.Component {
         };
 
         this.handleSliderChange = this.handleSliderChange.bind(this);
-        this.mergeSort = this.mergeSort.bind(this);
-        this.quickSort = this.quickSort.bind(this);
-        this.bubbleSort = this.bubbleSort.bind(this);
     }
 
     
@@ -50,42 +47,7 @@ export default class SortingVisualizer extends React.Component {
 
     componentDidMount() {
         this.resetArray();
-
-        const algorithmsDiv = document.querySelector('.algorithms');
-
-        algorithmsDiv.addEventListener('mouseenter', () => {
-            algorithmsDiv.classList.add('fade-in');
-            algorithmsDiv.innerHTML = `
-              <div className="algorithm-option" onClick={this.handleMergeSortClick}>
-                Merge Sort
-              </div>
-              <div className="algorithm-option" onClick={this.handleQuickSortClick}>
-                Quick Sort
-              </div>
-              <div className="algorithm-option" onClick={this.handleBubbleSortClick}>
-                Bubble Sort
-              </div>
-            `;
-            console.log(algorithmsDiv);
-          });
-          
-        algorithmsDiv.addEventListener('mouseleave', function() {
-            algorithmsDiv.classList.remove('fade-in');
-            algorithmsDiv.innerHTML = 'ALGORITHMS';
-        });
     }
-    handleMergeSortClick = () => {
-        console.log('Merge sort running...');
-        this.mergeSort();
-    };
-      
-      handleQuickSortClick() {
-        console.log('Quick sort clicked!');
-      }
-      
-      handleBubbleSortClick() {
-        console.log('Bubble sort clicked!');
-      }
       
     setWidth() {
         const barWidth = MAX_WIDTH - ((MAX_WIDTH - MIN_WIDTH) * (this.state.numberOfBars - MIN_BARS)) / (MAX_BARS - MIN_BARS);
@@ -98,7 +60,6 @@ export default class SortingVisualizer extends React.Component {
         const delay = MAX_SPEED - 
           ((MAX_SPEED - MIN_SPEED) * (MAX_BARS - numberOfBars)) /
             (MAX_BARS - MIN_BARS);
-        console.log('Setting delay to: ', delay);
         this.setState({ delay });
       }
 
@@ -111,7 +72,6 @@ export default class SortingVisualizer extends React.Component {
     }
 
     mergeSort() {
-        console.log("Merge Sort...");
         let animations = mergeSort(this.state.array);
         const arrayBars = document.getElementsByClassName('array-bar');
 
