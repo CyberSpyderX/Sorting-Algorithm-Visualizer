@@ -177,25 +177,25 @@ export default class SortingVisualizer extends React.Component {
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
                     barTwoStyle.backgroundColor = color;
-                }, i * this.state.delay * 0.25);
+                }, i * this.state.delay * 2);
 
             } else if(type === 'S') {
                 setTimeout(() => {
                     const barOneStyle = arraybars[barOneIdx].style;
                     barOneStyle.height = `${barTwoIdx}px`;
-                }, i * this.state.delay * 0.25);
+                }, i * this.state.delay * 2);
             } else {
                 setTimeout(() => {
                     const barOneStyle = arraybars[barOneIdx].style;
                     barOneStyle.backgroundColor = FINAL_COLOR;
-                }, i * this.state.delay * 0.25);
+                }, i * this.state.delay * 2);
             }
         }
         
         setTimeout(() => {
             this.setState({ isSorting: false });
            this.changeSliderBackground('#808080','#00ffcc', ' rgb(255, 0, 255)'); 
-        }, animations.length * this.state.delay);
+        }, animations.length * this.state.delay * 2);
     }
 
     changeSliderBackground(initialColor, finalColor, rightColor) {
@@ -335,13 +335,11 @@ export default class SortingVisualizer extends React.Component {
                     </div>
                 </div>
                 <div className='array-container'>
-                    <div className='array-bar-container'>
-                        {
-                            array.map((val, idx) => (
-                                <div className="array-bar" key={idx} style={{height: `${val}px`, width: `${this.state.barWidth}px`, backgroundColor: 'white'}} />
-                            ))
-                        }
-                    </div>
+                    {
+                        array.map((val, idx) => (
+                            <div className="array-bar" key={idx} style={{height: `${val}px`, width: `${this.state.barWidth}px`, backgroundColor: 'white'}} />
+                        ))
+                    }
                 </div>
             </div>
         )
