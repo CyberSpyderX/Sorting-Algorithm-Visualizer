@@ -28,7 +28,26 @@ body {
   opacity: 0;
   transition: opacity 5s;
 }
+.color-option {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
 
+.color-picker {
+  position: absolute;
+  z-index: 100;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.color-picker button {
+  margin-top: 10px;
+}
 .algorithms.fade-in:hover {
   opacity: 1;
 }
@@ -36,11 +55,17 @@ body {
 
 .colors {
   display: flex;
-  background-color: black;
+  flex: 1;
+  justify-content: center;
   align-items: center;
   color: white;
   font-size: 24px;
-  justify-content: center;
+}
+
+.color-options {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
 }
 
 .algorithms:hover,

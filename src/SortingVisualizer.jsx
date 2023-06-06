@@ -1,5 +1,7 @@
 import React from 'react';
 import './SortingVisualizer.css';
+import { CompactPicker } from 'react-color';
+
 import { mergeSort, quickSort, bubbleSort } from './sortingAlgorithms';
 
 const MIN_BARS = 10;
@@ -28,11 +30,21 @@ export default class SortingVisualizer extends React.Component {
             barWidth: 20,
             delay: 30,
             showAlgorithmOptions: false,
+            showColorOptions: false,
             algorithmOption: '',
             sliderBackground: 'linear-gradient(to right, #00ffcc, #ff00ff)',
             isSorting: false,
+            comparisonColor: 'red',
+            originalColor: 'white',
+            finalColor: 'lightgreen',
+            colorPicker: {
+                isOpen: false,
+                selectedColorKey: '',
+                style: {}
+            },
         };
 
+        this.handleSliderChange = this.handleSliderChange.bind(this);
         this.handleSliderChange = this.handleSliderChange.bind(this);
     }
 
@@ -61,17 +73,8 @@ export default class SortingVisualizer extends React.Component {
       
     setWidth() {
         const barWidth = MAX_WIDTH - ((MAX_WIDTH - MIN_WIDTH) * (this.state.numberOfBars - MIN_BARS)) / (MAX_BARS - MIN_BARS);
-        console.log(this.state.numberOfBars, MAX_WIDTH, MAX_WIDTH);
         this.setState({ barWidth });
     }
-
-    handleAlgorithmsMouseEnter = () => {
-        this.setState({ showAlgorithmOptions: true });
-    };
-
-    handleAlgorithmsMouseLeave = () => {
-        this.setState({ showAlgorithmOptions: false });
-    };
 
     setDelay() {
         const { numberOfBars } = this.state;
@@ -266,6 +269,20 @@ export default class SortingVisualizer extends React.Component {
         }
     }
 
+    comparisonColor = '#FF0000';
+    originalColor = '#00FF00';
+    finalColor = '#0000FF';
+
+    
+    handleColorOptionClick(event, colorKey) {
+        const { top, left, height } = event.target.getBoundingClientRect();
+        
+        const pickerTop = top + height + 5;
+        const pickerLeft = left - 117.5;
+
+        this.setState({ colorPicker: { isOpen: true, selectedColorKey: colorKey, style: {left: pickerLeft, top: pickerTop} }})
+    }
+
     render() {
         const {array} = this.state;
         console.log('Rendering...');
@@ -296,37 +313,68 @@ export default class SortingVisualizer extends React.Component {
                         </div>
                     </div>
                     <div className='algo-options'>
-                    <div
-                        className="algorithms"
-                        onMouseEnter={this.handleAlgorithmsMouseEnter}
-                        onMouseLeave={this.handleAlgorithmsMouseLeave}
-                        >
-                        {!this.state.showAlgorithmOptions ? "ALGORITHMS" : 
-                            <div className='algo-options'>
-                                <div
-                                    className={`algorithm-option ${this.state.algorithmOption === 'mergeSort' ? 'active' : ''}`}
-                                    onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'mergeSort' }) } }
-                                >
-                                    Merge Sort
+                        <div
+                            className="algorithms"
+                            onMouseEnter={() => this.setState({ showAlgorithmOptions: true })}
+                            onMouseLeave={() => this.setState({ showAlgorithmOptions: false })}
+                            >
+                            {!this.state.showAlgorithmOptions ? "ALGORITHMS" : 
+                                <div className='algo-options'>
+                                    <div
+                                        className={`algorithm-option ${this.state.algorithmOption === 'mergeSort' ? 'active' : ''}`}
+                                        onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'mergeSort' }) } }
+                                    >
+                                        Merge Sort
+                                    </div>
+                                    <div
+                                        className={`algorithm-option ${this.state.algorithmOption === 'quickSort' ? 'active' : ''}`}
+                                        onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'quickSort' }) } }
+                                    >
+                                        Quick Sort
+                                    </div>
+                                    <div
+                                        className={`algorithm-option ${this.state.algorithmOption === 'bubbleSort' ? 'active' : ''}`}
+                                        onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'bubbleSort' }) } }
+                                    >
+                                        Bubble Sort
+                                    </div>
                                 </div>
-                                <div
-                                    className={`algorithm-option ${this.state.algorithmOption === 'quickSort' ? 'active' : ''}`}
-                                    onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'quickSort' }) } }
-                                >
-                                    Quick Sort
-                                </div>
-                                <div
-                                    className={`algorithm-option ${this.state.algorithmOption === 'bubbleSort' ? 'active' : ''}`}
-                                    onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'bubbleSort' }) } }
-                                >
-                                    Bubble Sort
-                                </div>
+                            }
                             </div>
-                        }
-                        </div>
-                        <div className='colors'>
-                            COLORS
-                        </div>
+                            <div className='colors'
+                            onMouseEnter={() => this.setState({ showColorOptions: true })}
+                            onMouseLeave={() => this.setState({ showColorOptions: false })}>
+                                {
+                                    this.state.showColorOptions ? 
+                                    (
+                                        <div className='color-options'>
+                                            <div className="color-option"
+                                                style={{ backgroundColor: this.state.comparisonColor }}
+                                                onClick={(event) => this.handleColorOptionClick(event, 'comparisonColor')}
+                                            />
+                                            <div className="color-option"
+                                                style={{ backgroundColor: this.state.originalColor }}
+                                                onClick={() => this.showColorPicker('originalColor')}
+                                            />
+                                            <div className="color-option"
+                                                style={{ backgroundColor: this.state.finalColor }}
+                                                onClick={() => this.showColorPicker('finalColor')}
+                                            />
+                                             {
+                                                this.state.colorPicker.isOpen ?
+                                                <div className='color-picker' style={this.state.colorPicker.style}>
+                                                    <CompactPicker
+                                                        color={'red'}
+                                                        onChange={(color) => this.handleColorChange(color, 'originalColor')}
+                                                    />
+                                                </div> : null
+                                             }
+                                        </div>
+                                    ) : 'COLORS'
+
+                                }
+                                
+                            </div>
                     </div>
                     <div className='visualize-button'>
                     <button className='glowing-btn' onClick={() => this.visualize()} disabled={this.state.isSorting}>
