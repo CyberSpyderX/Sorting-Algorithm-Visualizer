@@ -19,11 +19,19 @@ const SLIDER_ENABLED_COLOR_RIGHT = '#ff00ff'
 const SLIDER_DISABLED_COLOR_LEFT = '#808080'
 const SLIDER_DISABLED_COLOR_RIGHT = '#808080'
 
+const defaultColorPicker = {
+    isOpen: false,
+    selectedColorKey: '',
+    selectedColor: '',
+    style: {}
+};
 export default class SortingVisualizer extends React.Component {
 
     constructor(props) {
         super(props);
-        
+
+       
+
         this.state = {
             array: [],
             numberOfBars: 10,
@@ -34,12 +42,15 @@ export default class SortingVisualizer extends React.Component {
             algorithmOption: '',
             sliderBackground: 'linear-gradient(to right, #00ffcc, #ff00ff)',
             isSorting: false,
-            comparisonColor: 'red',
-            originalColor: 'white',
-            finalColor: 'lightgreen',
+            algorithmColors: {
+                comparisonColor: 'red',
+                originalColor: 'white',
+                finalColor: 'lightgreen',
+            },
             colorPicker: {
                 isOpen: false,
                 selectedColorKey: '',
+                selectedColor: '',
                 style: {}
             },
         };
@@ -60,9 +71,10 @@ export default class SortingVisualizer extends React.Component {
     };
 
     setArrayBarsBackgroundColor() {
+        const { originalColor } = this.state.algorithmColors;
         const arrayBars = document.getElementsByClassName('array-bar');
         for (let i = 0; i < arrayBars.length; i++) {
-            arrayBars[i].style.backgroundColor = ORIGINAL_COLOR;
+            arrayBars[i].style.backgroundColor = originalColor;
         }
     }
     
@@ -89,10 +101,11 @@ export default class SortingVisualizer extends React.Component {
         for(let i = 0; i < this.state.numberOfBars; i++) {
             array.push(this.getRandomNumber(5, 500));
         }
-        this.setState({array});
+        this.setState({ array });
     }
 
     mergeSort() {
+        const { comparisonColor, originalColor, finalColor } = this.state.algorithmColors;
 
         let animations = mergeSort(this.state.array.slice());
         const arrayBars = document.getElementsByClassName('array-bar');
@@ -104,7 +117,7 @@ export default class SortingVisualizer extends React.Component {
             const [barOneIdx, barTwoIdx] = animations[i];
             const barOneStyle = arrayBars[barOneIdx].style;
             const barTwoStyle = arrayBars[barTwoIdx].style;
-            const color = i % 3 === 0 ? COMPARISON_COLOR : ORIGINAL_COLOR;
+            const color = i % 3 === 0 ? comparisonColor : originalColor;
             setTimeout(() => {
               barOneStyle.backgroundColor = color;
               barTwoStyle.backgroundColor = color;
@@ -125,6 +138,7 @@ export default class SortingVisualizer extends React.Component {
 
     quickSort() {
         
+        const { comparisonColor, originalColor, finalColor } = this.state.algorithmColors;
         let animations = quickSort(this.state.array.slice());
 
         for (let i = 0; i < animations.length; i++) {
@@ -134,7 +148,7 @@ export default class SortingVisualizer extends React.Component {
                 const barOneStyle = arraybars[barOneIdx].style;
                 const barTwoStyle = arraybars[barTwoIdx].style;
 
-                const color = type === 'C' ? COMPARISON_COLOR : ORIGINAL_COLOR;
+                const color = type === 'C' ? comparisonColor : originalColor;
 
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
@@ -150,7 +164,7 @@ export default class SortingVisualizer extends React.Component {
                 setTimeout(() => {
                     console.log(barOneIdx, barTwoIdx);
                     const barOneStyle = arraybars[barOneIdx].style;
-                    barOneStyle.backgroundColor = FINAL_COLOR;
+                    barOneStyle.backgroundColor = finalColor;
                 }, i * this.state.delay);
         }
       }
@@ -164,8 +178,7 @@ export default class SortingVisualizer extends React.Component {
 
     bubbleSort() {
 
-        this.setState({ algorithmOption: 'bubbleSort'});
-        
+        const { comparisonColor, originalColor, finalColor } = this.state.algorithmColors;
         let animations = bubbleSort(this.state.array.slice());
 
         for (let i = 0; i < animations.length; i++) {
@@ -175,7 +188,7 @@ export default class SortingVisualizer extends React.Component {
                 const barOneStyle = arraybars[barOneIdx].style;
                 const barTwoStyle = arraybars[barTwoIdx].style;
 
-                const color = type === 'C' ? COMPARISON_COLOR : ORIGINAL_COLOR;
+                const color = type === 'C' ? comparisonColor : originalColor;
 
                 setTimeout(() => {
                     barOneStyle.backgroundColor = color;
@@ -190,7 +203,7 @@ export default class SortingVisualizer extends React.Component {
             } else {
                 setTimeout(() => {
                     const barOneStyle = arraybars[barOneIdx].style;
-                    barOneStyle.backgroundColor = FINAL_COLOR;
+                    barOneStyle.backgroundColor = finalColor;
                 }, i * this.state.delay * 2);
             }
         }
@@ -198,7 +211,7 @@ export default class SortingVisualizer extends React.Component {
         setTimeout(() => {
             this.setState({ isSorting: false });
            this.changeSliderBackground('#808080','#00ffcc', ' rgb(255, 0, 255)'); 
-        }, animations.length * this.state.delay * 2);
+        }, animations.length * this.state.delay * 0.5);
     }
 
     changeSliderBackground(initialColor, finalColor, rightColor) {
@@ -218,37 +231,37 @@ export default class SortingVisualizer extends React.Component {
         }, duration / steps);
     }
     
-      lerpColor(color1, color2, progress) {
+    lerpColor(color1, color2, progress) {
 
-        const hexToRgb = (hex) => {
-            const r = parseInt(hex.slice(1, 3), 16);
-            const g = parseInt(hex.slice(3, 5), 16);
-            const b = parseInt(hex.slice(5, 7), 16);
-            return [r, g, b];
-          };
-        
-          const rgbToHex = (rgb) => {
-            const componentToHex = (c) => {
-              const hex = c.toString(16);
-              return hex.length === 1 ? '0' + hex : hex;
-            };
-            return '#' + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
-          };
+    const hexToRgb = (hex) => {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return [r, g, b];
+        };
+    
+        const rgbToHex = (rgb) => {
+        const componentToHex = (c) => {
+            const hex = c.toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+        };
+        return '#' + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
+        };
 
-        const color1Rgb = hexToRgb(color1);
-        const color2Rgb = hexToRgb(color2);
-        // const color1Rgb = color1.match(/\d+/g).map(Number);
-        // const color2Rgb = color2.match(/\d+/g).map(Number);
-        console.log(color1Rgb, color2Rgb);
+    const color1Rgb = hexToRgb(color1);
+    const color2Rgb = hexToRgb(color2);
+    // const color1Rgb = color1.match(/\d+/g).map(Number);
+    // const color2Rgb = color2.match(/\d+/g).map(Number);
+    console.log(color1Rgb, color2Rgb);
+    
+    const r = Math.round(this.lerp(color1Rgb[0], color2Rgb[0], progress));
+    const g = Math.round(this.lerp(color1Rgb[1], color2Rgb[1], progress));
+    const b = Math.round(this.lerp(color1Rgb[2], color2Rgb[2], progress));
+    
+    return `rgb(${r}, ${g}, ${b})`;
+    }
       
-        const r = Math.round(this.lerp(color1Rgb[0], color2Rgb[0], progress));
-        const g = Math.round(this.lerp(color1Rgb[1], color2Rgb[1], progress));
-        const b = Math.round(this.lerp(color1Rgb[2], color2Rgb[2], progress));
       
-        return `rgb(${r}, ${g}, ${b})`;
-      }
-      
-      // Helper function to linearly interpolate between two values
     lerp(value1, value2, progress) {
         return value1 + (value2 - value1) * progress;
     }
@@ -268,11 +281,6 @@ export default class SortingVisualizer extends React.Component {
             this.bubbleSort();
         }
     }
-
-    comparisonColor = '#FF0000';
-    originalColor = '#00FF00';
-    finalColor = '#0000FF';
-
     
     handleColorOptionClick(event, colorKey) {
         const { top, left, height } = event.target.getBoundingClientRect();
@@ -280,7 +288,13 @@ export default class SortingVisualizer extends React.Component {
         const pickerTop = top + height + 5;
         const pickerLeft = left - 117.5;
 
-        this.setState({ colorPicker: { isOpen: true, selectedColorKey: colorKey, style: {left: pickerLeft, top: pickerTop} }})
+        this.setState({ colorPicker: { isOpen: true, selectedColorKey: colorKey, selectedColor: this.state.algorithmColors[colorKey], style: {left: pickerLeft, top: pickerTop} }})
+    }
+
+    
+    
+    handleColorChange(color, colorKey) {
+        this.setState({ algorithmColors: { ...this.state.algorithmColors, [colorKey]: color }, colorPicker: {...defaultColorPicker}, showColorOptions: false});
     }
 
     render() {
@@ -343,29 +357,29 @@ export default class SortingVisualizer extends React.Component {
                             </div>
                             <div className='colors'
                             onMouseEnter={() => this.setState({ showColorOptions: true })}
-                            onMouseLeave={() => this.setState({ showColorOptions: false })}>
+                            onMouseLeave={() => this.setState({ showColorOptions: false, colorPicker: { ...defaultColorPicker } })}>
                                 {
                                     this.state.showColorOptions ? 
                                     (
                                         <div className='color-options'>
                                             <div className="color-option"
-                                                style={{ backgroundColor: this.state.comparisonColor }}
+                                                style={{ backgroundColor: this.state.algorithmColors.comparisonColor }}
                                                 onClick={(event) => this.handleColorOptionClick(event, 'comparisonColor')}
                                             />
                                             <div className="color-option"
-                                                style={{ backgroundColor: this.state.originalColor }}
-                                                onClick={() => this.showColorPicker('originalColor')}
+                                                style={{ backgroundColor: this.state.algorithmColors.originalColor }}
+                                                onClick={(event) => this.handleColorOptionClick(event, 'originalColor')}
                                             />
                                             <div className="color-option"
-                                                style={{ backgroundColor: this.state.finalColor }}
-                                                onClick={() => this.showColorPicker('finalColor')}
+                                                style={{ backgroundColor: this.state.algorithmColors.finalColor }}
+                                                onClick={(event) => this.handleColorOptionClick(event, 'finalColor')}
                                             />
                                              {
                                                 this.state.colorPicker.isOpen ?
                                                 <div className='color-picker' style={this.state.colorPicker.style}>
                                                     <CompactPicker
-                                                        color={'red'}
-                                                        onChange={(color) => this.handleColorChange(color, 'originalColor')}
+                                                        color={this.state.colorPicker.selectedColor}
+                                                        onChange={(color) => this.handleColorChange(color.hex, this.state.colorPicker.selectedColorKey)}
                                                     />
                                                 </div> : null
                                              }
@@ -385,7 +399,7 @@ export default class SortingVisualizer extends React.Component {
                 <div className='array-container'>
                     {
                         array.map((val, idx) => (
-                            <div className="array-bar" key={idx} style={{height: `${val}px`, width: `${this.state.barWidth}px`, backgroundColor: 'white'}} />
+                            <div className="array-bar" key={idx} style={{height: `${val}px`, width: `${this.state.barWidth}px`, backgroundColor: this.state.algorithmColors.originalColor}} />
                         ))
                     }
                 </div>
