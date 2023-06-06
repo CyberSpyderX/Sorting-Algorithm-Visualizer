@@ -1,0 +1,420 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.algo-options {
+  height: 100px;
+  display: flex;
+}
+
+.algorithms,
+.colors {
+  flex: 1;
+  height: 100%;
+  transition: flex 0.5s;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.algorithms {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  justify-content: center;
+}
+
+.algorithms.fade-in {
+  opacity: 0;
+  transition: opacity 5s;
+}
+
+.algorithms.fade-in:hover {
+  opacity: 1;
+}
+
+
+.colors {
+  display: flex;
+  background-color: black;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  justify-content: center;
+}
+
+.algorithms:hover,
+.colors:hover {
+  flex: 1;
+}
+
+.algo-options:hover .algorithms:not(:hover),
+.algo-options:hover .colors:not(:hover) {
+  flex: 0;
+}
+
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 20px;
+}
+
+.num-bars {
+    font-size: 16px;
+    color: #ffffff;
+    margin: 20px;
+}
+
+.array-container {
+    display: flex;
+    height: 90%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.array-bar {
+    background-color: white;
+    display: inline-block;
+    margin: 5px 1px;
+    width: 25px;
+}
+
+.options-menu {
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+}
+
+.num-bars-speed {
+    flex: 25;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.num-bars-speed-label {
+    flex: 2;
+}
+
+.num-bars-speed-slider {
+    flex: 8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.algo-options {
+    display: flex;
+    flex: 50;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.algorithm-option {
+    display: flex;
+    background-color: #e5e5e5;
+    padding: 10px;
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 120px;
+    transition: background-color 0.3s;
+}
+
+.algorithm-option:hover {
+    background-color: #c5c5c5;
+}
+
+
+
+.visualize-button {
+    flex: 25;
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.slider-container {
+    width: 300px; /* Adjust the width as needed */
+    position: relative;
+  }
+  
+  .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #00ffcc, #ff00ff); /* Adjust the gradient colors */
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px; /* Adjust the knob size as needed */
+    height: 24px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Adjust the shadow as needed */
+  }
+  
+  .slider::-webkit-slider-thumb:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Adjust the hover shadow as needed */
+  }
+  
+  .slider::-webkit-slider-thumb:active {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Adjust the active shadow as needed */
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 24px; /* Adjust the knob size as needed */
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Adjust the shadow as needed */
+  }
+  
+  .slider::-moz-range-thumb:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Adjust the hover shadow as needed */
+  }
+  
+  .slider::-moz-range-thumb:active {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Adjust the active shadow as needed */
+  }
+
+  @import url("https://fonts.googleapis.com/css?family=Raleway");
+
+:root {
+  --glow-color: hsl(186 100% 69%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+}
+
+.glowing-btn {
+  position: relative;
+  color: var(--glow-color);
+  cursor: pointer;
+  padding: 0.35em 1em;
+  border: 0.15em solid var(--glow-color);
+  border-radius: 0.45em;
+  background: none;
+  perspective: 2em;
+  font-family: "Raleway", sans-serif;
+  font-size: 2em;
+  font-weight: 900;
+  letter-spacing: 0.5em;
+
+  -webkit-box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+    0px 0px 0.5em 0px var(--glow-color);
+  -moz-box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+    0px 0px 0.5em 0px var(--glow-color);
+  box-shadow: inset 0px 0px 0.5em 0px var(--glow-color),
+    0px 0px 0.5em 0px var(--glow-color);
+  animation: border-flicker 2s linear infinite;
+}
+
+.glowing-txt {
+  float: left;
+  margin-right: -0.8em;
+  -webkit-text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3),
+    0 0 0.45em var(--glow-color);
+  -moz-text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3),
+    0 0 0.45em var(--glow-color);
+  text-shadow: 0 0 0.125em hsl(0 0% 100% / 0.3), 0 0 0.45em var(--glow-color);
+  animation: text-flicker 3s linear infinite;
+}
+
+.faulty-letter {
+  opacity: 0.5;
+  animation: faulty-flicker 2s linear infinite;
+}
+
+.glowing-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.7;
+  filter: blur(1em);
+  transform: translateY(120%) rotateX(95deg) scale(1, 0.35);
+  background: var(--glow-color);
+  pointer-events: none;
+}
+
+.glowing-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  z-index: -1;
+  background-color: var(--glow-color);
+  box-shadow: 0 0 2em 0.2em var(--glow-color);
+  transition: opacity 100ms linear;
+}
+
+.glowing-btn:hover {
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: none;
+  animation: none;
+}
+
+.glowing-btn:hover .glowing-txt {
+  animation: none;
+}
+
+.glowing-btn:hover .faulty-letter {
+  animation: none;
+  text-shadow: none;
+  opacity: 1;
+}
+
+.glowing-btn:hover:before {
+  filter: blur(1.5em);
+  opacity: 1;
+}
+
+.glowing-btn:hover:after {
+  opacity: 1;
+}
+
+@keyframes faulty-flicker {
+  0% {
+    opacity: 0.1;
+  }
+  2% {
+    opacity: 0.1;
+  }
+  4% {
+    opacity: 0.5;
+  }
+  19% {
+    opacity: 0.5;
+  }
+  21% {
+    opacity: 0.1;
+  }
+  23% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  83% {
+    opacity: 0.4;
+  }
+
+  87% {
+    opacity: 1;
+  }
+}
+
+@keyframes text-flicker {
+  0% {
+    opacity: 0.1;
+  }
+
+  2% {
+    opacity: 1;
+  }
+
+  8% {
+    opacity: 0.1;
+  }
+
+  9% {
+    opacity: 1;
+  }
+
+  12% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.3;
+  }
+  30% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.7;
+  }
+  72% {
+    opacity: 0.2;
+  }
+
+  77% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes border-flicker {
+  0% {
+    opacity: 0.1;
+  }
+  2% {
+    opacity: 1;
+  }
+  4% {
+    opacity: 0.1;
+  }
+
+  8% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .glowing-btn{
+    font-size: 1em;
+  }
+}
