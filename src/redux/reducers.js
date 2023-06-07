@@ -1,4 +1,4 @@
-import { UPDATE_ARRAY_COMPARISONS, UPDATE_ARRAY_ACCESSES } from './actions';
+import { UPDATE_ARRAY_COMPARISONS, UPDATE_ARRAY_ACCESSES, RESET } from './actions';
 
 const initialState = {
   accesses: 0,
@@ -8,17 +8,19 @@ const initialState = {
 const metricsReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_ARRAY_ACCESSES:
-        console.log('Accesses: ', state.accesses + action.payload);
       return {
             ...state,
             accesses: state.accesses + action.payload,
       };
     case UPDATE_ARRAY_COMPARISONS:
-        console.log('Comparisons: ', state.comparisons + action.payload);
         return {
             ...state,
             comparisons: state.comparisons + action.payload,
         };
+    case RESET:
+      return {
+        ...initialState
+      }
     default:
       return state;
   }
