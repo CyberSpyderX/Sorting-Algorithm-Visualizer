@@ -5,12 +5,12 @@ body {
 .algo-options {
   height: 100px;
   display: flex;
+  align-items: center;
 }
 
 .algorithms,
 .colors {
   flex: 1;
-  height: 100%;
   transition: flex 0.5s;
   box-sizing: border-box;
   overflow: hidden;
@@ -160,29 +160,6 @@ body {
     padding: 10px;
 }
 
-.algorithm-option {
-    display: flex;
-    background-color: #e5e5e5;
-    padding: 10px;
-    height: 80%;
-    border-radius: 4px;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    color: black;
-    font-size: 18px;
-    transition: background-color 1s;
-}
-
-.algorithm-option:hover {
-    background-color: #c5c5c5;
-}
-
-.algorithm-option.active {
-  background-color: lightgreen;
-}
-
-
 .visualize-button {
     flex: 25;
 }
@@ -257,7 +234,7 @@ body {
   @import url("https://fonts.googleapis.com/css?family=Raleway");
 
 :root {
-  --glow-color: hsl(186 100% 69%);
+  --glow-color: #61efff;
 }
 
 *,
@@ -470,7 +447,7 @@ body {
   }
 }
 
-button {
+.algo-button {
   position: relative;
   background: #444;
   color: #fff;
@@ -479,32 +456,22 @@ button {
   border: none;
   letter-spacing: 0.1rem;
   font-size: 1rem;
-  padding: 1rem 1rem;
+  padding: 1rem 3rem;
   transition: 0.2s;
   cursor: pointer;
 }
 
-button.active {
+.algo-button.active {
   background: var(--clr);
+  color: var(--clr);
   animation: box 3s infinite;
 }
 
-button.active:hover {
+.algo-button.active :hover {
   animation: none;
 }
 
-button.active i::after {
-  width: 15px;
-  left: 80%;
-  animation: move 3s infinite;
-}
-button.active i::before {
-  width: 15px;
-  left: 20%;
-  animation: move 3s infinite;
-}
-
-button:hover {
+.algo-button:hover {
   letter-spacing: 0.2rem;
   padding: 1.1rem 3.1rem;
   background: var(--clr);
@@ -513,24 +480,24 @@ button:hover {
   animation: box 3s infinite;
 }
 
-button::before {
+.algo-button::before {
   content: "";
   position: absolute;
   inset: 2px;
   background: #272822;
 }
 
-button span {
+.algo-button span {
   position: relative;
   z-index: 1;
 }
-button i {
+.algo-button i {
   position: absolute;
   inset: 0;
   display: block;
 }
 
-button i::before {
+.algo-button i::before {
   content: "";
   position: absolute;
   width: 10px;
@@ -542,13 +509,13 @@ button i::before {
   transition: 0.2s;
 }
 
-button:hover i::before {
+.algo-button:hover i::before {
   width: 15px;
   left: 20%;
   animation: move 3s infinite;
 }
 
-button i::after {
+.algo-button i::after {
   content: "";
   position: absolute;
   width: 10px;
@@ -560,7 +527,7 @@ button i::after {
   transition: 0.2s;
 }
 
-button:hover i::after {
+.algo-button:hover i::after {
   width: 15px;
   left: 80%;
   animation: move 3s infinite;
