@@ -1,5 +1,10 @@
+import { updateAlgorithmMetrics } from "./redux/counterActions";
+import { UPDATE_ARRAY_COMPARISONS, UPDATE_ARRAY_ACCESSES } from './redux/actions';
+
+import store from './redux/store';
+
 export const mergeSort = array => {
-    let animations = []
+    let animations = [];
     if(array.length <= 1) return array;
     const auxilliaryArray = array.slice();
     mergeSortHelper(array, auxilliaryArray, 0, array.length - 1, animations);
@@ -27,10 +32,13 @@ function bubbleSortHelper(array, animations) {
 
     for ( let i = 0; i < len; i++) {
         for( let j = 0; j < len - i - 1; j++) {
+            store.dispatch(updateAlgorithmMetrics(UPDATE_ARRAY_COMPARISONS, 1));
+            store.dispatch(updateAlgorithmMetrics(UPDATE_ARRAY_ACCESSES, 2));
             animations.push(['C', j, j + 1]);
             animations.push(['R', j, j + 1]);
 
             if(array[j] > array[j + 1]) {
+                store.dispatch(updateAlgorithmMetrics(UPDATE_ARRAY_ACCESSES, 2));
                 animations.push(['S', j, array[j + 1]]);
                 animations.push(['S', j + 1, array[j]]);
                 swapElements(array, j, j + 1);
@@ -51,20 +59,25 @@ function quickSortHelper(array, startIdx, endIdx, animations) {
 }
 function partition(array, startIdx, endIdx, animations) {
     const pivot = array[endIdx];
-
+    store.dispatch(updateAlgorithmMetrics(UPDATE_ARRAY_ACCESSES, 1));
+    
     let i = (startIdx - 1);
 
     for(let j = startIdx; j < endIdx; j++) {
         animations.push(['C', i + 1, j]);
         animations.push(['R', i + 1, j]);
         
+        store.dispatch(updateAlgorithmMetrics(UPDATE_ARRAY_COMPARISONS, 1));
+        store.dispatch(updateAlgorithmMetrics(UPDATE_ARRAY_ACCESSES, 1));
         if(array[j] < pivot) {
+            store.dispatch(updateAlgorithmMetrics(UPDATE_ARRAY_ACCESSES, 2));
             i++;
             animations.push(['S', i, array[j]]);
             animations.push(['S', j, array[i]]);
             swapElements(array, i, j);
         }
     }
+    store.dispatch(updateAlgorithmMetrics(UPDATE_ARRAY_ACCESSES, 2));
     animations.push(['S', i + 1, array[endIdx]]);
     animations.push(['S', endIdx, array[i + 1]]);
     swapElements(array, i + 1, endIdx);

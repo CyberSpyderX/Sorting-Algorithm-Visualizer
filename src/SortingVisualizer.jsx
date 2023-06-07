@@ -1,6 +1,7 @@
 import React from 'react';
 import './SortingVisualizer.css';
 import { CompactPicker } from 'react-color';
+import { connect } from 'react-redux';
 
 import { mergeSort, quickSort, bubbleSort } from './sortingAlgorithms';
 
@@ -25,12 +26,11 @@ const defaultColorPicker = {
     selectedColor: '',
     style: {}
 };
-export default class SortingVisualizer extends React.Component {
+
+class SortingVisualizer extends React.Component {
 
     constructor(props) {
         super(props);
-
-       
 
         this.state = {
             array: [],
@@ -58,7 +58,6 @@ export default class SortingVisualizer extends React.Component {
         this.handleSliderChange = this.handleSliderChange.bind(this);
         this.handleSliderChange = this.handleSliderChange.bind(this);
     }
-
     
     handleSliderChange (event) {
         const value = event.target.value;
@@ -105,12 +104,11 @@ export default class SortingVisualizer extends React.Component {
     }
 
     mergeSort() {
-        const { comparisonColor, originalColor, finalColor } = this.state.algorithmColors;
+        const { comparisonColor, originalColor } = this.state.algorithmColors;
 
         let animations = mergeSort(this.state.array.slice());
         const arrayBars = document.getElementsByClassName('array-bar');
 
-        console.log(this.state.array);
         for (let i = 0; i < animations.length; i++) {
           const isColorChange = i % 3 !== 2;
           if (isColorChange) {
@@ -121,18 +119,21 @@ export default class SortingVisualizer extends React.Component {
             setTimeout(() => {
               barOneStyle.backgroundColor = color;
               barTwoStyle.backgroundColor = color;
+              this.props.updateComparisons(i % 3 === 0 && barOneIdx !== barTwoIdx);
+              this.props.updateAccesses( barOneIdx !== barTwoIdx );
             }, i * this.state.delay);
           } else {
             setTimeout(() => {
               const [barOneIdx, newHeight] = animations[i];
               const barOneStyle = arrayBars[barOneIdx].style;
               barOneStyle.height = `${newHeight}px`;
+              this.props.updateAccesses(2);
             }, i * this.state.delay);
           }
         }
         setTimeout(() => {
             this.setState({ isSorting: false });
-           this.changeSliderBackground('#808080','#00ffcc', ' rgb(255, 0, 255)'); 
+            this.changeSliderBackground('#808080','#00ffcc', ' rgb(255, 0, 255)'); 
         }, animations.length * this.state.delay);
       }
 
@@ -147,7 +148,9 @@ export default class SortingVisualizer extends React.Component {
             if(type === 'C' || type === 'R') {
                 const barOneStyle = arraybars[barOneIdx].style;
                 const barTwoStyle = arraybars[barTwoIdx].style;
-
+                
+                if(type === 'C') this.props.updateComparisons(1);
+                this.props.updateAccesses(1);
                 const color = type === 'C' ? comparisonColor : originalColor;
 
                 setTimeout(() => {
@@ -157,6 +160,7 @@ export default class SortingVisualizer extends React.Component {
 
             } else if(type === 'S') {
                 setTimeout(() => {
+                    this.props.updateAccesses(2);
                     const barOneStyle = arraybars[barOneIdx].style;
                     barOneStyle.height = `${barTwoIdx}px`;
                 }, i * this.state.delay);
@@ -299,6 +303,7 @@ export default class SortingVisualizer extends React.Component {
 
     render() {
         const {array} = this.state;
+        const { accesses, comparisons } = this.props;
         console.log('Rendering...');
         return (
             <div className='container'>
@@ -403,6 +408,9 @@ export default class SortingVisualizer extends React.Component {
                         ))
                     }
                 </div>
+                <div>
+                    <p style={{background: 'white'}}>Accesses: {accesses}, Comparisons: {comparisons}</p>
+                </div>
             </div>
         )
     }
@@ -411,3 +419,18 @@ export default class SortingVisualizer extends React.Component {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }
+
+
+const mapStateToProps = (state) => ({
+    accesses: state.accesses,
+    comparisons: state.comparisons,
+  });
+  
+  const mapDispatchToProps = (dispatch) => ({
+    updateAccesses: (payload) => dispatch({ type: 'UPDATE_ARRAY_ACCESSES', payload }),
+    updateComparisons: (payload) => dispatch({ type: 'UPDATE_ARRAY_COMPARISONS', payload }),
+    increment: () => dispatch({ type: 'INCREMENT' }),
+    decrement: () => dispatch({ type: 'DECREMENT' }),
+  });
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(SortingVisualizer);
