@@ -1,6 +1,6 @@
 {
   "name": "sorting-visualizer",
-  "homepage": "http://cyberspyderx.github.io/sorting-visualizer",
+  "homepage": "http://cyberspyderx.github.io/Sorting-Algorithm-Visualizer",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

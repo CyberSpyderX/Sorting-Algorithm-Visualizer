@@ -153,9 +153,13 @@ class SortingVisualizer extends React.Component {
         
         setTimeout(() => {
            this.setState({ arrayConfiguration: { ...arrayConfiguration, array: newArray}, status: { ...status, isSorting: false}});
-           this.handleColorChanges('sliderBackground', '#808080', '#ff00ff', 'linear-gradient(to right, #404040, ', ')', 500)
-           this.handleColorChanges('sliderBackground', '#404040', '#00ffcc', 'linear-gradient(to right, ', ', #ff00ff)', 500)
            this.handleColorChanges('glowBorderColor', '#ff0000', '#61efff');
+            setTimeout(() => {
+                this.handleColorChanges('sliderBackground', '#808080', '#ff00ff', 'linear-gradient(to right, #404040, ', ')', 500)
+                setTimeout(() => {
+                    this.handleColorChanges('sliderBackground', '#404040', '#00ffcc', 'linear-gradient(to right, ', ', #ff00ff)', 500);
+                }, 500);
+            }, 1000);
         }, animations.length * delay * delayFactor);
 
     }
@@ -201,9 +205,13 @@ class SortingVisualizer extends React.Component {
 
         this.props.resetMetrics();
         this.setState({ status: { ...status, isSorting: true}});
-        this.handleColorChanges('sliderBackground', '#ff00ff', '#808080', 'linear-gradient(to right, #00ffcc, ', ')');
-        this.handleColorChanges('sliderBackground', '#00ffcc', '#404040', 'linear-gradient(to right, ', ', #808080)');
         this.handleColorChanges('glowBorderColor', '#61efff', '#ff0000');
+        setTimeout(() => {
+            this.handleColorChanges('sliderBackground', '#ff00ff', '#808080', 'linear-gradient(to right, #00ffcc, ', ')', 500);
+            setTimeout(() => {
+                this.handleColorChanges('sliderBackground', '#00ffcc', '#404040', 'linear-gradient(to right, ', ', #808080)', 500);
+            }, 500);
+        }, 1000);
 
         let newArray = array.slice();
         let animations = [], metrics = [];
