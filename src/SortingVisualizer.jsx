@@ -51,6 +51,7 @@ class SortingVisualizer extends React.Component {
                 style: {}
             },
             glowBorderColor: '#61efff',
+            algorithmLabelColor: 'white',
         };
 
         this.handleSliderChange = this.handleSliderChange.bind(this);
@@ -305,14 +306,14 @@ class SortingVisualizer extends React.Component {
     
     handleColorChanges(component) {
         console.log('Changing color for... ', component);
-        let  duration = 500; 
         const steps = 60;
-        let stepCount = 0;
 
         let leftString = '';
 
         if(component === 'sliderBackground') {
+            const duration = 1000;
             leftString = `linear-gradient(to right, #00ffcc, `; 
+            let stepCount = 0;
             
             const rightColorInterval = setInterval(() => {
                 const progress = stepCount / steps;
@@ -340,33 +341,60 @@ class SortingVisualizer extends React.Component {
 
         } else if(component ==='glowColor') {
             console.log('Visualize color changing...');
-            duration = 1000;
-            const colorInterval = setInterval(() => {
-                const progress = stepCount / steps;
+            const duration = 1000;
+            let visStepCount = 0;
+            let algoStepCount = 0;
+            const visualizeColorInterval = setInterval(() => {
+                console.log('Orig: ', visStepCount);
+                const progress = visStepCount / steps;
                 const newColor = `${this.lerpColor('#61efff', '#ff0000', progress)}`;
                 this.setState({ glowBorderColor: newColor });
-                stepCount++;
+                visStepCount++;
+                console.log('New: ', visStepCount);
             
-                if (stepCount >= steps) {
-                    clearInterval(colorInterval);
+                if (visStepCount >= steps) {
+                    clearInterval(visualizeColorInterval);
                     setTimeout(() => {
-                        stepCount = 0;
+                        visStepCount = 0;
                         console.log('Visualize color changing back...');
-                        const newColorInterval = setInterval(() => {
-                            const progress = stepCount / steps;
+                        const newVisualizeColorInterval = setInterval(() => {
+                            const progress = visStepCount / steps;
                             const newColor = `${this.lerpColor('#ff0000', '#61efff', progress)}`;
                             this.setState({ glowBorderColor: newColor });
-                            stepCount++;
+                            visStepCount++;
                         
-                            if (stepCount >= steps) {
-                                clearInterval(newColorInterval);
+                            if (visStepCount >= steps) {
+                                clearInterval(newVisualizeColorInterval);
                             }
                         }, duration / steps);
                     }, 1000);
                 }
             }, duration / steps);
 
-            
+            const algorithmLabelColorInterval = setInterval(() => {
+                const progress = algoStepCount / steps;
+                const newColor = `${this.lerpColor('#ffffff', '#ff0000', progress)}`;
+                this.setState({ algorithmLabelColor: newColor });
+                algoStepCount++;
+
+                if (algoStepCount >= steps) {
+                    clearInterval(algorithmLabelColorInterval);
+                    setTimeout(() => {
+                        algoStepCount = 0;
+                        console.log('Visualize color changing back...');
+                        const newAlgorithmLabelColorInterval = setInterval(() => {
+                            const progress = algoStepCount / steps;
+                            const newColor = `${this.lerpColor('#ff0000', '#ffffff', progress)}`;
+                            this.setState({ algorithmLabelColor: newColor });
+                            algoStepCount++;
+                        
+                            if (algoStepCount >= steps) {
+                                clearInterval(newAlgorithmLabelColorInterval);
+                            }
+                        }, duration / steps);
+                    }, 1000);
+                }
+            }, duration / steps);
         }
         
         
@@ -478,7 +506,7 @@ class SortingVisualizer extends React.Component {
                             onMouseEnter={() => this.setState({ showAlgorithmOptions: true })}
                             onMouseLeave={() => this.setState({ showAlgorithmOptions: false })}
                             >
-                            {!this.state.showAlgorithmOptions ? "ALGORITHMS" : 
+                            {!this.state.showAlgorithmOptions ? <div style={{ color: this.state.algorithmLabelColor }}>ALGORITHMS</div> : 
                                 <div className='algo-options'>
                                     <div className={`algo-button ${this.state.algorithmOption === 'mergeSort' ? 'active' : ''}`}
                                         onClick={() =>  { if( !this.state.isSorting ) this.setState({ algorithmOption: 'mergeSort' }) } }
