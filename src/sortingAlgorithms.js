@@ -110,29 +110,29 @@ function doMerge(array, auxilliaryArray, startIdx, midIdx, endIdx, animations, m
 
     while(i <= midIdx && j <= endIdx) {
         metrics[METRIC_COMPARISONS]++;
-        animations.push([i, j]);
-        animations.push([i, j]);
+        animations.push(['C', i, j]);
+        animations.push(['R', i, j]);
         if(auxilliaryArray[i] <= auxilliaryArray[j]) {
-            animations.push([k, auxilliaryArray[i]]);
+            animations.push(['S', k, auxilliaryArray[i]]);
             array[k++] = auxilliaryArray[i++];
         } else {
-            animations.push([k, auxilliaryArray[j]]);
+            animations.push(['S', k, auxilliaryArray[j]]);
             array[k++] = auxilliaryArray[j++];
         }
         metrics[METRIC_ACCESSES] += 4;
     }
 
     while(i <= midIdx) {
-        animations.push([i, i]);
-        animations.push([i, i]);
-        animations.push([k, auxilliaryArray[i]]);
+        animations.push(['C', i, i]);
+        animations.push(['R', i, i]);
+        animations.push(['S', k, auxilliaryArray[i]]);
         array[k++] = auxilliaryArray[i++];
         metrics[METRIC_ACCESSES] += 2;
     }
     while(j <= endIdx) {
-        animations.push([j, j]);
-        animations.push([j, j]);
-        animations.push([k, auxilliaryArray[j]]);
+        animations.push(['C', j, j]);
+        animations.push(['R', j, j]);
+        animations.push(['S', k, auxilliaryArray[j]]);
         array[k++] = auxilliaryArray[j++];
         metrics[METRIC_ACCESSES] += 2;
     }

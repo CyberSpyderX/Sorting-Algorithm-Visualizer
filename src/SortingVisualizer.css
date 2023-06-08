@@ -1,16 +1,19 @@
-body {
-    font-family: 'Poppins', sans-serif;
-}
-
 .algo-options {
-  height: 100px;
   display: flex;
+  flex: 1;
+  height: 100px;
+  justify-content: space-around;
   align-items: center;
 }
 
+.algo-options {
+  display: flex;
+  flex: 50;
+}
 .algorithms,
 .colors {
   flex: 1;
+  height: 100%;
   transition: flex 0.5s;
   box-sizing: border-box;
   overflow: hidden;
@@ -19,15 +22,34 @@ body {
 .algorithms {
   display: flex;
   align-items: center;
+  justify-content: center;
   color: white;
   font-size: 24px;
-  justify-content: center;
 }
 
+.colors {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+}
 .algorithms.fade-in {
   opacity: 0;
   transition: opacity 5s;
 }
+
+.algorithms:hover,
+.colors:hover {
+  flex: 1;
+}
+
+.algorithms:hover .colors:not(:hover),
+.colors:hover .algorithms:not(:hover) {
+  flex: 0;
+}
+
 .color-option {
   width: 30px;
   height: 30px;
@@ -52,16 +74,6 @@ body {
   opacity: 1;
 }
 
-
-.colors {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 24px;
-}
-
 .color-options {
   display: flex;
   flex: 1;
@@ -81,15 +93,7 @@ body {
   align-items: center;
 }
 
-.algorithms:hover,
-.colors:hover {
-  flex: 1;
-}
 
-.algo-options:hover .algorithms:not(:hover),
-.algo-options:hover .colors:not(:hover) {
-  flex: 0;
-}
 
 .title {
     flex: 5;
@@ -153,13 +157,6 @@ body {
     justify-content: center;
 }
 
-.algo-options {
-    display: flex;
-    flex: 50;
-    justify-content: space-around;
-    padding: 10px;
-}
-
 .visualize-button {
     flex: 25;
 }
@@ -170,66 +167,6 @@ body {
   flex-direction: column;
 }
 
-
-.slider-container {
-    width: 300px; /* Adjust the width as needed */
-    position: relative;
-  }
-  
-  .slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 10px;
-    border-radius: 5px;
-    background: linear-gradient(to right, #00ffcc, #ff00ff); /* Adjust the gradient colors */
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-    position: relative;
-    z-index: 1;
-  }
-  
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 24px; /* Adjust the knob size as needed */
-    height: 24px;
-    border-radius: 50%;
-    background: #fff;
-    cursor: pointer;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Adjust the shadow as needed */
-  }
-  
-  .slider::-webkit-slider-thumb:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Adjust the hover shadow as needed */
-  }
-  
-  .slider::-webkit-slider-thumb:active {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Adjust the active shadow as needed */
-  }
-  
-  .slider::-moz-range-thumb {
-    width: 24px; /* Adjust the knob size as needed */
-    height: 24px;
-    border: none;
-    border-radius: 50%;
-    background: #fff;
-    cursor: pointer;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Adjust the shadow as needed */
-  }
-  
-  .slider::-moz-range-thumb:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Adjust the hover shadow as needed */
-  }
-  
-  .slider::-moz-range-thumb:active {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Adjust the active shadow as needed */
-  }
 
   @import url("https://fonts.googleapis.com/css?family=Raleway");
 
@@ -248,14 +185,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: black;
+  background: black;  
+  font-family: 'Poppins', sans-serif;
 }
 
 .glowing-btn {
   position: relative;
   color: var(--glow-color);
   cursor: pointer;
-  padding: 0.35em 1em;
+  padding: 0.35em 0.625em;
   border: 0.15em solid var(--glow-color);
   border-radius: 0.45em;
   background: none;
@@ -444,115 +382,5 @@ body {
 @media only screen and (max-width: 600px) {
   .glowing-btn{
     font-size: 1em;
-  }
-}
-
-.algo-button {
-  position: relative;
-  background: #444;
-  color: #fff;
-  text-decoration: none;
-  text-transform: uppercase;
-  border: none;
-  letter-spacing: 0.1rem;
-  font-size: 1rem;
-  padding: 1rem 3rem;
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-.algo-button.active {
-  background: var(--clr);
-  color: var(--clr);
-  animation: box 3s infinite;
-}
-
-.algo-button.active :hover {
-  animation: none;
-}
-
-.algo-button:hover {
-  letter-spacing: 0.2rem;
-  padding: 1.1rem 3.1rem;
-  background: var(--clr);
-  color: var(--clr);
-  /* box-shadow: 0 0 35px var(--clr); */
-  animation: box 3s infinite;
-}
-
-.algo-button::before {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  background: #272822;
-}
-
-.algo-button span {
-  position: relative;
-  z-index: 1;
-}
-.algo-button i {
-  position: absolute;
-  inset: 0;
-  display: block;
-}
-
-.algo-button i::before {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 2px;
-  left: 80%;
-  top: -2px;
-  border: 2px solid var(--clr);
-  background: #272822;
-  transition: 0.2s;
-}
-
-.algo-button:hover i::before {
-  width: 15px;
-  left: 20%;
-  animation: move 3s infinite;
-}
-
-.algo-button i::after {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 2px;
-  left: 20%;
-  bottom: -2px;
-  border: 2px solid var(--clr);
-  background: #272822;
-  transition: 0.2s;
-}
-
-.algo-button:hover i::after {
-  width: 15px;
-  left: 80%;
-  animation: move 3s infinite;
-}
-
-@keyframes move {
-  0% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-@keyframes box {
-  0% {
-    box-shadow: #27272c;
-  }
-  50% {
-    box-shadow: 0 0 25px var(--clr);
-  }
-  100% {
-    box-shadow: #27272c;
   }
 }
