@@ -2,26 +2,12 @@ import React from 'react';
 import './SortingVisualizer.css';
 import { CompactPicker } from 'react-color';
 import { connect } from 'react-redux';
-
+import { MIN_BARS, MAX_BARS, MIN_WIDTH, MAX_WIDTH, MIN_SPEED, MAX_SPEED, defaultColorPicker} from './constants';
 import { mergeSort, quickSort, bubbleSort } from './sortingAlgorithms';
 import { lerpColor } from './utilityFunctions';
 import BarSlider from './design/BarSlider/BarSlider';
 import ColorOption from './design/ColorOption/ColorOption';
 import AlgorithmButton from './design/AlgorithmButton/AlgorithmButton';
-
-const MIN_BARS = 10;
-const MAX_BARS = 200;
-const MIN_WIDTH = 4;
-const MAX_WIDTH = 20;
-const MIN_SPEED = 30;
-const MAX_SPEED = 5;
-
-const defaultColorPicker = {
-    isOpen: false,
-    selectedColorKey: '',
-    selectedColor: '',
-    style: {}
-};
 
 class SortingVisualizer extends React.Component {
 
